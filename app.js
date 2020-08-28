@@ -30,7 +30,12 @@ app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'", 'https://*.mapbox.com', 'https://js.stripe.com/'],
+      defaultSrc: [
+        "'self'",
+        'https://*.mapbox.com',
+        'https://js.stripe.com/',
+        'data:'
+      ],
       // connectSrc: [
       //   "'self'",
       //   '/api/v1/users/login',
@@ -41,9 +46,10 @@ app.use(
       fontSrc: ["'self'", 'https:', 'data:'],
       scriptSrc: [
         "'self'",
-        'https://js.stripe.com/v3/',
-        'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js',
-        'https://js.stripe.com/v3/'
+        'https:'
+        //js.stripe.com/v3/',
+        // 'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js',
+        // 'https://js.stripe.com/v3/
       ],
       // objectSrc: ["'none'"],
       styleSrc: ["'self'", 'https:', 'unsafe-inline']
