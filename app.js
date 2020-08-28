@@ -30,7 +30,7 @@ app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      // defaultSrc: ["'self'", 'https://*.mapbox.com'],
+      defaultSrc: ["'self'", 'https://*.mapbox.com'],
       // connectSrc: [
       //   "'self'",
       //   '/api/v1/users/login',
