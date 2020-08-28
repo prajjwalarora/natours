@@ -37,16 +37,16 @@ app.use(
       //   '/api/v1/users/updateMe',
       //   'ws://'
       // ],
-      // baseUri: ["'self'"],
-      // fontSrc: ["'self'", 'https:', 'data:'],
+      baseUri: ["'self'"],
+      fontSrc: ["'self'", 'https:', 'data:'],
       scriptSrc: [
         "'self'",
         'https://js.stripe.com/v3/',
         'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js',
         'https://js.stripe.com/v3/'
-      ]
+      ],
       // objectSrc: ["'none'"],
-      // styleSrc: ["'self'", 'https:', 'unsafe-inline'],
+      styleSrc: ["'self'", 'https:', 'unsafe-inline']
       // upgradeInsecureRequests: []
     }
   })
