@@ -46,7 +46,8 @@ app.use(
       fontSrc: ["'self'", 'https:', 'data:'],
       scriptSrc: [
         "'self'",
-        'https:'
+        'https:',
+        'blob:'
         //js.stripe.com/v3/',
         // 'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js',
         // 'https://js.stripe.com/v3/
