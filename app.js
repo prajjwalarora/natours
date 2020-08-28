@@ -27,25 +27,25 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'", 'https://*.mapbox.com'],
-      connectSrc: [
-        "'self'",
-        '/api/v1/users/login',
-        '/api/v1/users/updateMe',
-        'ws://'
-      ],
-      baseUri: ["'self'"],
-      fontSrc: ["'self'", 'https:', 'data:'],
-      scriptSrc: ["'self'", 'https://js.stripe.com/v3/'],
-      objectSrc: ["'none'"],
-      styleSrc: ["'self'", 'https:', 'unsafe-inline'],
-      upgradeInsecureRequests: []
-    }
-  })
-);
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'", 'https://*.mapbox.com'],
+//       connectSrc: [
+//         "'self'",
+//         '/api/v1/users/login',
+//         '/api/v1/users/updateMe',
+//         'ws://'
+//       ],
+//       baseUri: ["'self'"],
+//       fontSrc: ["'self'", 'https:', 'data:'],
+//       scriptSrc: ["'self'", 'https://js.stripe.com/v3/'],
+//       objectSrc: ["'none'"],
+//       styleSrc: ["'self'", 'https:', 'unsafe-inline'],
+//       upgradeInsecureRequests: []
+//     }
+//   })
+// );
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
