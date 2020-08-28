@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -32,9 +33,9 @@ app.use(
       defaultSrc: ["'self'", 'https://*.mapbox.com'],
       connectSrc: [
         "'self'",
-        'http://127.0.0.1:8000/api/v1/users/login',
-        'http://127.0.0.1:8000/api/v1/users/updateMe',
-        'ws://127.0.0.1:*/'
+        '/api/v1/users/login',
+        '/api/v1/users/updateMe',
+        'ws://'
       ],
       baseUri: ["'self'"],
       fontSrc: ["'self'", 'https:', 'data:'],
@@ -78,6 +79,8 @@ app.use(
     ]
   })
 );
+
+app.use(compression());
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
