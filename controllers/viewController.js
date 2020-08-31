@@ -8,6 +8,8 @@ exports.alerts = (req, res, next) => {
   if (alert === 'booking')
     res.locals.alert =
       "Your Booking was successful! Please check your email for confirmation. If your booking doesn't show up here immediatly, please come back later.";
+  if (alert === 'notLoggedin')
+    res.locals.alert = "You're not loggedin. Please login to get access!";
   next();
 };
 
