@@ -132,6 +132,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
+    if (!req.headers['user-agent'].includes('PostmanRuntime'))
+      return res.redirect('/login');
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401)
     );
