@@ -36,12 +36,7 @@ app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: [
-        "'self'",
-        'https://*.mapbox.com',
-        'https://js.stripe.com/',
-        'data:'
-      ],
+      defaultSrc: ["'self'", 'https:', 'data:', 'ws:'],
       // connectSrc: [
       //   "'self'",
       //   '/api/v1/users/login',
@@ -112,7 +107,9 @@ app.use((req, res, next) => {
 
   next();
 });
-
+app.get('/test', (req, res, next) => {
+  res.status(200).render('verified');
+});
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);

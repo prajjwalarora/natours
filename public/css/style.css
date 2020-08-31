@@ -1193,7 +1193,8 @@ body {
   align-self: center;
 }
 
-.error {
+.error,
+.success {
   position: absolute;
   top: 35%;
   left: 50%;
@@ -1202,7 +1203,8 @@ body {
   max-width: 80rem;
   text-align: center;
 }
-.error__title {
+.error__title,
+.success__title {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1214,18 +1216,21 @@ body {
   justify-content: center;
   margin-bottom: 1rem;
 }
-.error__emoji {
+.error__emoji,
+.success__emoji {
   font-size: 3.75rem;
   margin-left: 1rem;
 }
-.error__msg {
+.error__msg,
+.success__msg {
   font-size: 2.5rem;
   font-weight: 700;
   max-width: 50rem;
   margin: 0 auto;
 }
 
-.login-form {
+.login-form,
+.signup-form {
   margin: 0 auto;
   max-width: 55rem;
   background-color: #fff;

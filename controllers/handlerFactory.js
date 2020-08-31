@@ -44,7 +44,7 @@ exports.createone = Model =>
 
 exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
-    let query = Model.findById(req.params.id);
+    const query = Model.findById(req.params.id);
 
     if (popOptions) query.populate(popOptions);
 
@@ -64,6 +64,7 @@ exports.getAll = Model =>
   catchAsync(async (req, res, next) => {
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
+    if (req.params.userId) filter = { user: req.params.userId };
 
     const features = new ApiFeatures(Model.find(filter), req.query)
       .filter()

@@ -41,19 +41,62 @@ const createSendToken = (user, statusCode, req, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+  const token = crypto.randomBytes(32).toString('hex');
+  const verifyEmailToken = crypto
+    .createHash('sha256')
+    .update(token)
+    .digest('hex');
+
+  const verifyEmailTokenExpires = Date.now() + 10 * 60 * 1000;
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt
+    passwordChangedAt: req.body.passwordChangedAt,
+    verifyEmailToken,
+    verifyEmailTokenExpires
   });
 
-  const url = `${req.protocol}://${req.get('host')}/me`;
+  const url = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/verifyEmail/${token}`;
   // console.log(url);
-  await new Email(newUser, url).sendWelcome();
+  await new Email(newUser, url).sendVerifyEmail();
 
-  createSendToken(newUser, 201, req, res);
+  res.status(201).json({
+    status: 'success',
+    data: {}
+  });
+  // createSendToken(newUser, 201, req, res);
+});
+
+exports.verifyEmail = catchAsync(async (req, res, next) => {
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const newUser = await User.findOne({
+    verifyEmailToken: hashedToken,
+    verifyEmailTokenExpires: { $gt: Date.now() }
+  });
+
+  if (!newUser)
+    return next(new AppError('Token is invalid or has expired', 400));
+  const url = `${req.protocol}://${req.get('host')}/me`;
+
+  newUser.emailVerified = true;
+  newUser.verifyEmailToken = undefined;
+  newUser.verifyEmailTokenExpires = undefined;
+  await newUser.save({ validateBeforeSave: false });
+  await new Email(newUser, url).sendWelcome();
+  if (req.headers['user-agent'].includes('PostmanRuntime'))
+    return createSendToken(newUser, 201, req, res);
+
+  res.status(201).render('verified', {
+    title: 'Email verified Successfully'
+  });
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -68,6 +111,10 @@ exports.login = catchAsync(async (req, res, next) => {
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password!', 401));
+  }
+
+  if (!user.emailVerified) {
+    return next(new AppError('Please First verify your email address!', 401));
   }
 
   createSendToken(user, 200, req, res);
@@ -129,6 +176,12 @@ exports.isLoggedIn = async (req, res, next) => {
         return next();
       }
 
+      if (!currentUser.emailVerified) {
+        return next(
+          new AppError('Please First verify your email address!', 401)
+        );
+      }
+
       res.locals.user = currentUser;
       return next();
     } catch (err) {
@@ -168,6 +221,10 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(new AppError('There is no user with that email address!', 404));
+  }
+
+  if (!user.emailVerified) {
+    return next(new AppError('Please First verify your email address!', 401));
   }
 
   const resetToken = user.createPasswordResetToken();
