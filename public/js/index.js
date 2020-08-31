@@ -3,6 +3,7 @@ import '@babel/polyfill';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { signup } from './signup';
+import { submitReview } from './review';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
 import { showAlert } from './alerts';
@@ -10,6 +11,7 @@ import { showAlert } from './alerts';
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const signupForm = document.querySelector('.form--signup');
+const reviewForm = document.querySelector('.form--review');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
@@ -83,5 +85,23 @@ if (signupForm) {
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
     signup(name, email, password, passwordConfirm);
+  });
+}
+
+if (reviewForm) {
+  reviewForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const rbs = document.querySelectorAll('input[name="rating"]');
+    let rating;
+    for (const rb of rbs) {
+      if (rb.checked) {
+        rating = rb.value;
+        break;
+      }
+    }
+    const review = document.getElementById('review').value;
+    const tourId = reviewForm.dataset.tourId;
+    console.log({ rating, review, tourId });
+    submitReview(rating, review, tourId);
   });
 }

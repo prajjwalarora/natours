@@ -5,7 +5,7 @@ block append head
     script(src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js')
     link(href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet')
 
-    
+
 
 mixin overviewBox(label, text, icon)
     .overview-box__detail
@@ -78,15 +78,54 @@ block content
 
     section.section-cta
         .cta
-            .cta__img.cta__img--logo
-                img(src='/img/logo-white.png', alt='Natours logo')
-            img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour picture')
-            img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour picture')
-            .cta__content
-                h2.heading-secondary What are you waiting for?
-                p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-                
-                if user
-                    button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
-                else
-                    a.btn.btn--green.span-all-rows(href='/login') Login to book tour
+            if isBookedTour
+                h2.heading-secondary.ma-bt-sm Thankyou! For booking this tour
+                br
+                br
+                h2.overview-box__text.ma-bt-lg Please write a review...
+                form.form.form--review(data-tour-id=`${tour.id}`)
+                    h2 Rating:-
+                    .form__group#rating__section
+                        span
+                            input#rating(type='radio' value='1' name='rating')
+                            |  &nbsp;
+                            label(for="rating") 
+                                span.overview-box__label 1
+                        span
+                            input#rating(type='radio' value='2' name='rating')
+                            |  &nbsp;
+                            label(for="rating") 
+                                span.overview-box__label 2
+                        span
+                            input#rating(type='radio' value='3' name='rating')
+                            |  &nbsp;
+                            label(for="rating") 
+                                span.overview-box__label 3
+                        span
+                            input#rating(type='radio' value='4' name='rating')
+                            |  &nbsp;
+                            label(for="rating") 
+                                span.overview-box__label 4
+                        span
+                            input#rating(type='radio' value='5' name='rating')
+                            |  &nbsp;
+                            label(for="rating") 
+                                span.overview-box__label 5
+                    .form__group.ma-bt-md#review__section
+                        label.form__label(for='review')
+                        textarea#review.form__input(type='text', placeholder='Write some review here....', required maxlength="100")
+                    .form__group
+                        button.btn.btn--green#add-review Add review
+            else
+                .cta__img.cta__img--logo
+                    img(src='/img/logo-white.png', alt='Natours logo')
+                img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour picture')
+                img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour picture')
+                .cta__content
+                    h2.heading-secondary What are you waiting for?
+                    p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
+
+                    if user
+                        button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+                    else
+                        a.btn.btn--green.span-all-rows(href='/login') Login to book tour

@@ -30,6 +30,11 @@ exports.getTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError('There is no tour with that name.', 404));
   }
+  const bookings = await Booking.find({
+    user: res.locals.user.id,
+    tour: tour.id
+  });
+  res.locals.isBookedTour = bookings.length > 0;
 
   res
     .status(200)
