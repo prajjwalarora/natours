@@ -72,7 +72,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyEmail = catchAsync(async (req, res, next) => {
-  const hashedToken = crypto
+  const hashedToken = await crypto
     .createHash('sha256')
     .update(req.params.token)
     .digest('hex');
