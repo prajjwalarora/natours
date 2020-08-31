@@ -8594,7 +8594,7 @@ var signup = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: 'POST',
-              url: 'http://127.0.01:8000/api/v1/users/signup',
+              url: '/api/v1/users/signup',
               data: {
                 name: name,
                 email: email,
