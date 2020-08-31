@@ -36,7 +36,7 @@ app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'", 'https:', 'data:', 'ws:'],
+      defaultSrc: ["'self'", 'https:', 'data:', 'ws:', 'http:'],
       // connectSrc: [
       //   "'self'",
       //   '/api/v1/users/login',
