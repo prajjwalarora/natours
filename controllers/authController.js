@@ -91,8 +91,8 @@ exports.verifyEmail = catchAsync(async (req, res, next) => {
   newUser.verifyEmailTokenExpires = undefined;
   await newUser.save({ validateBeforeSave: false });
   await new Email(newUser, url).sendWelcome();
-  if (req.headers['user-agent'].includes('PostmanRuntime'))
-    return createSendToken(newUser, 201, req, res);
+  // if (req.headers['user-agent'].includes('PostmanRuntime'))
+  //   return createSendToken(newUser, 201, req, res);
 
   res.status(201).render('verified', {
     title: 'Email verified Successfully'
