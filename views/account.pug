@@ -15,7 +15,8 @@ block content
                 ul.side-nav
                     +navItem('#', 'Settings', 'settings', true)
                     +navItem('/my-tours', 'My bookings', 'briefcase')
-                    +navItem('#', 'My reviews', 'star')
+                    +navItem('/my-favorite-tours', 'My Favorites', 'heart')
+                    +navItem('/my-reviews', 'My reviews', 'star')
                     +navItem('#', 'Billing', 'credit-card')
                 -if (user.role === 'admin')
                     .admin-nav

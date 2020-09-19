@@ -1,0 +1,31 @@
+extends base
+
+block content
+    main.main#review__page
+        .card-container
+            each review in reviews
+                .card
+                    .card__header
+                        .card__picture
+                            .card__picture-overlay &nbsp;
+                            img.card__picture-img(src=`img/tours/${review.tour.imageCover}`, alt=`${review.tour.name}`)
+                        h3.heading-tertirary
+                            span= review.tour.name
+
+                    .card__details
+                        form.form.form--review
+                            .form__group#rating__section
+                                label.form__label(for="rating") Rating
+                                -const selected = false
+                                select#rating(name="rating" disabled)
+                                    each value in [1,2,3,4,5]
+                                        if review.rating == value
+                                            option(value=`${value}` selected)= value
+                                        else    
+                                            option(value=`${value}`)= value
+                            .form__group.ma-bt-md#review__section
+                                label.form__label(for='review') Review
+                                textarea#review.form__input(type='text' maxlength="100"  required disabled)= `${review.review}`
+                    .card__footer
+                        button.btn-delete.btn.btn--red.btn--small(data-review-id=`${review._id}`) remove
+                        button.btn-update.btn.btn--green.btn--small(data-review-id=`${review._id}`) Update

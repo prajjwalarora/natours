@@ -2,6 +2,8 @@ const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Booking = require('../models/bookingModel');
+const Review = require('../models/reviewModel');
+const User = require('../models/userModel');
 
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
@@ -15,7 +17,6 @@ exports.alerts = (req, res, next) => {
 
 exports.getOverview = catchAsync(async (req, res, next) => {
   const tours = await Tour.find();
-
   res.status(200).render('overview', {
     title: 'All Tours',
     tours
@@ -52,11 +53,17 @@ exports.getTour = catchAsync(async (req, res, next) => {
 });
 
 exports.getLoginForm = (req, res) => {
+  if (res.locals.user) {
+    return res.redirect('/');
+  }
   res.status(200).render('login', {
     title: 'Log into your account'
   });
 };
 exports.getSignupForm = (req, res) => {
+  if (res.locals.user) {
+    return res.redirect('/');
+  }
   res.status(200).render('signup', {
     title: 'Signup'
   });
@@ -77,6 +84,24 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   res.status(200).render('overview', {
     title: 'My tours',
     tours
+  });
+});
+
+exports.getMyReviews = catchAsync(async (req, res) => {
+  const reviews = await Review.find({ user: req.user.id })
+    .select('-user')
+    .populate('tour');
+  res.status(200).render('review', {
+    title: 'My Reviews',
+    reviews
+  });
+});
+
+exports.getFavorites = catchAsync(async (req, res, next) => {
+  const favoriteTours = await User.findById(req.user.id).select('favorite');
+  res.status(200).render('overview', {
+    title: 'My Favorites',
+    tours: favoriteTours.favorite
   });
 });
 

@@ -53,7 +53,13 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false
-  }
+  },
+  favorite: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Tour'
+    }
+  ]
 });
 
 userSchema.pre('save', async function(next) {
@@ -74,6 +80,11 @@ userSchema.pre('save', function(next) {
 
 userSchema.pre(/^find/, function(next) {
   this.find({ active: { $ne: false } });
+  next();
+});
+
+userSchema.pre(/^find/, function(next) {
+  this.populate('favorite');
   next();
 });
 
@@ -108,6 +119,14 @@ userSchema.methods.createPasswordResetToken = function() {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
+};
+
+userSchema.methods.addFavorite = function(tourId) {
+  this.favorite.push(tourId);
+};
+
+userSchema.methods.removeFavorite = function(tourId) {
+  this.favorite.pull(tourId);
 };
 
 const User = mongoose.model('User', userSchema);

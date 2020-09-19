@@ -19,6 +19,13 @@ router.get(
   viewController.getMyTours
 );
 
+router.get(
+  '/my-favorite-tours',
+  authController.protect,
+  viewController.getFavorites
+);
+
+router.get('/my-reviews', authController.protect, viewController.getMyReviews);
 // router.post(
 //   '/submit-user-data',
 //   authController.protect,

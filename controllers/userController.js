@@ -105,3 +105,31 @@ exports.getAllUsers = factory.getAll(User);
 exports.getUser = factory.getOne(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
+
+exports.addFavorite = catchAsync(async (req, res, next) => {
+  req.user.addFavorite(req.params.tourId);
+  await req.user.save({ validateBeforeSave: false });
+  res.status(201).json({
+    status: 'success',
+    data: {}
+  });
+});
+
+exports.removeFavorite = catchAsync(async (req, res, next) => {
+  req.user.removeFavorite(req.params.tourId);
+  await req.user.save({ validateBeforeSave: false });
+  res.status(204).json({
+    status: 'success',
+    data: {}
+  });
+});
+
+exports.favorites = catchAsync(async (req, res, next) => {
+  const favorites = await User.findById(req.user.id).select('favorite');
+  res.status(200).json({
+    status: 'success',
+    data: {
+      favorites
+    }
+  });
+});

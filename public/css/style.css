@@ -238,6 +238,13 @@ body {
   background-color: #55c57a;
 }
 
+.btn--red {
+  color: #ff5d5d;
+}
+.btn--green::after {
+  color: #ff5d5d;
+}
+
 .btn--small {
   padding: 1.25rem 3rem !important;
   font-size: 1.4rem !important;
@@ -1330,4 +1337,18 @@ body {
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
+}
+
+#favorite {
+  position: relative;
+  float: right;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+#favorite:hover {
+  transform: scale(1.1);
+}
+
+.favorite-on {
+  fill: #fd1a36;
 }

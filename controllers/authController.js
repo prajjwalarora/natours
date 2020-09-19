@@ -108,7 +108,6 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await User.findOne({
     email
   }).select('+password');
-
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password!', 401));
   }
@@ -133,7 +132,10 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   if (!token) {
     if (!req.headers['user-agent'].includes('PostmanRuntime'))
-      return res.redirect('/login?alert=notLoggedin');
+      return res.status(401).json({
+        status: 'error',
+        message: 'Please Login to perform this action!'
+      });
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401)
     );

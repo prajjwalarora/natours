@@ -3,19 +3,24 @@ import '@babel/polyfill';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { signup } from './signup';
-import { submitReview } from './review';
+import { submitReview, updateReview, deleteReview } from './review';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
 import { showAlert } from './alerts';
+import { addFavorite, removeFavorite } from './favorite';
 
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const signupForm = document.querySelector('.form--signup');
+const header = document.querySelector('.section-header');
 const reviewForm = document.querySelector('.form--review');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
+const favBtn = document.getElementById('favorite');
+
+const reviewPage = document.getElementById('review__page');
 
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
@@ -27,6 +32,7 @@ if (loginForm) {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    console.log(password);
     login(email, password);
   });
 }
@@ -91,17 +97,56 @@ if (signupForm) {
 if (reviewForm) {
   reviewForm.addEventListener('submit', e => {
     e.preventDefault();
-    const rbs = document.querySelectorAll('input[name="rating"]');
-    let rating;
-    for (const rb of rbs) {
-      if (rb.checked) {
-        rating = rb.value;
-        break;
-      }
-    }
+    const rating = document.getElementById('rating').value;
     const review = document.getElementById('review').value;
-    const tourId = reviewForm.dataset.tourId;
-    console.log({ rating, review, tourId });
+    const tourId = header.dataset.tourId;
     submitReview(rating, review, tourId);
+  });
+}
+
+
+if (reviewPage) {
+  const btnDelete = document.querySelectorAll('.btn-delete');
+  const btnUpdate = document.querySelectorAll('.btn-update');
+  const rating = document.querySelectorAll('#rating');
+  const review = document.querySelectorAll('#review');
+  console.log({ rating, review });
+  btnUpdate.forEach((btn, i) => {
+    btn.addEventListener('click', e => {
+      btn.textContent = 'Save'
+      rating[i].disabled = false;
+      review[i].disabled = false;
+      btn.addEventListener('click', e => {
+        const reviewId = btn.dataset.reviewId
+        console.log(rating[i].value);
+        btn.disabled = true
+        btn.textContent = 'Saving...'
+        updateReview(reviewId, rating[i].value, review[i].value);
+      })
+    })
+
+
+  });
+
+  btnDelete.forEach((btn, i) => {
+    btn.addEventListener('click', e => {
+      const reviewId = btn.dataset.reviewId
+      btn.textContent = 'Removing...'
+      btn.disabled = true
+      deleteReview(reviewId);
+    })
+  })
+
+}
+
+if (favBtn) {
+  favBtn.addEventListener('click', e => {
+    const vector = document.getElementById('Vector');
+    const tourId = header.dataset.tourId;
+    if (!vector.classList.contains('favorite-on')) {
+      addFavorite(tourId, vector.classList);
+    } else {
+      removeFavorite(tourId, vector.classList);
+    }
   });
 }

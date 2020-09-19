@@ -15,7 +15,7 @@ mixin overviewBox(label, text, icon)
         span.overview-box__text= text
 
 block content
-    section.section-header
+    section.section-header(data-tour-id=`${tour.id}`)
         .header__hero
             .header__hero-overlay &nbsp;
             img.header__hero-img(src=`/img//tours/${tour.imageCover}`, alt=`${tour.name}`)
@@ -57,9 +57,28 @@ block content
                             span.overview-box__text= guide.name
 
         .description-box
+            if user
+            svg#favorite(width="114" height="114" viewbox="0 0 114 114" fill="none" xmlns="http://www.w3.org/2000/svg" )
+                rect(width="114" height="114" fill="#E5E5E5")
+                g(id="Desktop - 1")
+                    rect(width="1440" height="1024" transform="translate(-868 -745)" fill="white")
+                g(id="Ellipse 2" filter="url(#filter0_d)")
+                    circle(cx="57" cy="57" r="40" fill="white")
+                -let fav = user.favorite.some(el => el.id == tour.id ) ? 'favorite-on':'';
+                path#Vector(d="M66.2527 37C63.4057 37 60.7011 38.28 58.7082 40.52L57 42.44L55.4342 40.68C51.3061 35.88 44.4733 35.88 40.3452 40.52L40.2028 40.68C35.9324 45.48 35.9324 53.16 40.2028 57.96L57 77L73.7972 57.96C78.0676 53.16 78.0676 45.48 73.7972 40.68C71.8043 38.28 69.0996 37 66.2527 37Z" fill="#20DA81" class= `${fav}`)
+                //- 20DA81  FD1A36
+                defs
+                    filter#filter0_d(x="0" y="0" width="114" height="114" filterunits="userSpaceOnUse" color-interpolation-filters="sRGB")
+                        feflood(flood-opacity="0" result="BackgroundImageFix")
+                        fecolormatrix(in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0")
+                        femorphology(radius="6" operator="erode" in="SourceAlpha" result="effect1_dropShadow")
+                        feoffset
+                        fegaussianblur(stddeviation="11.5")
+                        fecolormatrix(type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0")
+                        feblend(mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow")
+                        feblend(mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape")
             h2.heading-secondary.ma-bt-lg= `About ${tour.name} tour`
             - const paragraphs = tour.description.split('\n');
-
             each p in paragraphs
                 p.description__text= p
 
@@ -83,34 +102,16 @@ block content
                 br
                 br
                 h2.overview-box__text.ma-bt-lg Please write a review...
-                form.form.form--review(data-tour-id=`${tour.id}`)
+                form.form.form--review
                     h2 Rating:-
                     .form__group#rating__section
-                        span
-                            input#rating(type='radio' value='1' name='rating')
-                            |  &nbsp;
-                            label(for="rating") 
-                                span.overview-box__label 1
-                        span
-                            input#rating(type='radio' value='2' name='rating')
-                            |  &nbsp;
-                            label(for="rating") 
-                                span.overview-box__label 2
-                        span
-                            input#rating(type='radio' value='3' name='rating')
-                            |  &nbsp;
-                            label(for="rating") 
-                                span.overview-box__label 3
-                        span
-                            input#rating(type='radio' value='4' name='rating')
-                            |  &nbsp;
-                            label(for="rating") 
-                                span.overview-box__label 4
-                        span
-                            input#rating(type='radio' value='5' name='rating')
-                            |  &nbsp;
-                            label(for="rating") 
-                                span.overview-box__label 5
+                        label(for="rating")
+                        select#rating(name="rating")
+                            option(value="1") 1
+                            option(value="2") 2
+                            option(value="3") 3
+                            option(value="4") 4
+                            option(value="5") 5
                     .form__group.ma-bt-md#review__section
                         label.form__label(for='review')
                         textarea#review.form__input(type='text', placeholder='Write some review here....', required maxlength="100")
